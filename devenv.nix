@@ -9,6 +9,9 @@
   pkgs.git 
   pkgs.graphviz
   pkgs.plantuml
+  pkgs.golangci-lint
+  pkgs.cloc
+
   ];
 
   # https://devenv.sh/languages/
@@ -17,6 +20,7 @@
   languages.java.enable = true;
   languages.python.enable = true;
   languages.python.venv.enable = true;
+  languages.typst.enable = true;
 
   # https://devenv.sh/processes/
   # processes.cargo-watch.exec = "cargo-watch";
@@ -28,6 +32,15 @@
   scripts.hello.exec = ''
     echo hello from $GREET
   '';
+  
+  scripts.generate.exec = ''
+  python3 gomodgraph.networkx.py go_mod_graph.txt $1 $2
+  '';
+
+  scripts.gomod-graph.exec = ''
+  go mod graph > go_mod_graph.txt
+  '';
+
   scripts.component_diagram.exec =''
   #!/bin/bash
 

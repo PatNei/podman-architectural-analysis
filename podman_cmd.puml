@@ -1,0 +1,643 @@
+@startuml
+left to right direction
+namespace artifact {
+    class artifactAddOptions << (S,Aquamarine) >> {
+        + ArtifactType string
+        + Annotations []string
+
+    }
+    class artifactListOutput << (S,Aquamarine) >> {
+        + Digest string
+        + Repository string
+        + Size string
+        + Tag string
+
+    }
+    class listFlagType << (S,Aquamarine) >> {
+        - format string
+        - noHeading bool
+        - noTrunc bool
+
+    }
+    class pullOptionsWrapper << (S,Aquamarine) >> {
+        + TLSVerifyCLI bool
+        + CredentialsCLI string
+        + DecryptionKeys []string
+
+    }
+    class pushOptionsWrapper << (S,Aquamarine) >> {
+        + TLSVerifyCLI bool
+        + CredentialsCLI string
+        + SignPassphraseFileCLI string
+        + SignBySigstoreParamFileCLI string
+        + EncryptionKeys []string
+        + EncryptLayers []int
+        + DigestFile string
+
+    }
+    class rmFlagType << (S,Aquamarine) >> {
+        - force bool
+
+    }
+}
+"entities.ArtifactPullOptions" *-- "artifact.pullOptionsWrapper"
+"entities.ArtifactPushOptions" *-- "artifact.pushOptionsWrapper"
+
+
+namespace common {
+    class BuildFlagsWrapper << (S,Aquamarine) >> {
+        + SquashAll bool
+        + Cleanup bool
+
+    }
+    class common.completeType << (T, #FF7700) >>  {
+    }
+    class common.keyValueCompletion << (T, #FF7700) >>  {
+    }
+    class formatSuggestion << (S,Aquamarine) >> {
+        - fieldname string
+        - suffix string
+
+    }
+    class signingCleanup << (S,Aquamarine) >> {
+        - signers []*signer.Signer
+
+        - cleanup() 
+
+    }
+    class "<font color=blue>map</font>[string]<font color=blue>func</font>(string) ([]string, cobra.ShellCompDirective)" as fontcolorbluemapfontstringfontcolorbluefuncfontstringstringcobraShellCompDirective {
+        'This class was created so that we can correctly have an alias pointing to this name. Since it contains dots that can break namespaces
+    }
+}
+"cli.BudResults" *-- "common.BuildFlagsWrapper"
+"cli.FromAndBudResults" *-- "common.BuildFlagsWrapper"
+"cli.LayerResults" *-- "common.BuildFlagsWrapper"
+"cli.NameSpaceResults" *-- "common.BuildFlagsWrapper"
+"cli.UserNSResults" *-- "common.BuildFlagsWrapper"
+
+
+namespace containers {
+    class checkpointStatistics << (S,Aquamarine) >> {
+        + PodmanDuration int64
+        + ContainerStatistics []*entities.CheckpointReport
+
+    }
+    class containerStats << (S,Aquamarine) >> {
+        + ID() string
+        + CPUPerc() string
+        + AVGCPU() string
+        + Up() string
+        + MemPerc() string
+        + NetIO() string
+        + BlockIO() string
+        + PIDS() string
+        + MemUsage() string
+        + MemUsageBytes() string
+
+    }
+    class exposedPort << (S,Aquamarine) >> {
+        - num uint16
+        - protocol string
+        - portRange uint16
+
+    }
+    class logsOptionsWrapper << (S,Aquamarine) >> {
+        + SinceRaw string
+        + UntilRaw string
+
+    }
+    class mountReporter << (S,Aquamarine) >> {
+        + ID() string
+
+    }
+    class psReporter << (S,Aquamarine) >> {
+        + ImageID() string
+        + Label(name string) string
+        + ID() string
+        + Pod() string
+        + Status() string
+        + Restarts() string
+        + RunningFor() string
+        + Command() string
+        + Size() string
+        + Names() string
+        + Networks() string
+        + Ports() string
+        + CreatedAt() string
+        + CreatedHuman() string
+        + Cgroup() string
+        + IPC() string
+        + MNT() string
+        + NET() string
+        + PIDNS() string
+        + User() string
+        + UTS() string
+
+    }
+    class restoreStatistics << (S,Aquamarine) >> {
+        + PodmanDuration int64
+        + ContainerStatistics []*entities.RestoreReport
+
+    }
+    class runlabelOptionsWrapper << (S,Aquamarine) >> {
+        + TLSVerifyCLI bool
+
+    }
+    class statsOptionsCLI << (S,Aquamarine) >> {
+        + All bool
+        + Format string
+        + Latest bool
+        + NoReset bool
+        + NoStream bool
+        + Interval int
+
+    }
+}
+"define.ContainerStats" *-- "containers.containerStats"
+"entities.ContainerLogsOptions" *-- "containers.logsOptionsWrapper"
+"entities.ContainerMountReport" *-- "containers.mountReporter"
+"entities.ListContainer" *-- "containers.psReporter"
+"entities.ContainerRunlabelOptions" *-- "containers.runlabelOptionsWrapper"
+
+
+namespace diff {
+    class ChangesReportJSON << (S,Aquamarine) >> {
+        + Changed []string
+        + Added []string
+        + Deleted []string
+
+    }
+}
+
+
+namespace farm {
+    class buildOptions << (S,Aquamarine) >> {
+        - buildOptions common.BuildFlagsWrapper
+        - local bool
+        - platforms []string
+        - farm string
+
+    }
+}
+
+
+namespace images {
+    class historyReporter << (S,Aquamarine) >> {
+        + Created() string
+        + Size() string
+        + CreatedBy() string
+        + ID() string
+        + CreatedAt() string
+        + CreatedSince() string
+
+    }
+    class imageReporter << (S,Aquamarine) >> {
+        + Repository string
+        + Tag string
+
+        - created() time.Time
+        - size() int64
+
+        + ID() string
+        + Created() string
+        + Size() string
+        + History() string
+        + CreatedAt() string
+        + CreatedSince() string
+        + CreatedTime() string
+
+    }
+    class listEntryTag << (S,Aquamarine) >> {
+        + Name string
+        + Tags []string
+
+    }
+    class listFlagType << (S,Aquamarine) >> {
+        - format string
+        - history bool
+        - noHeading bool
+        - noTrunc bool
+        - quiet bool
+        - sort string
+        - readOnly bool
+        - digests bool
+
+    }
+    class mountReporter << (S,Aquamarine) >> {
+        + ID() string
+
+    }
+    class pullOptionsWrapper << (S,Aquamarine) >> {
+        + TLSVerifyCLI bool
+        + CredentialsCLI string
+        + DecryptionKeys []string
+
+    }
+    class pushOptionsWrapper << (S,Aquamarine) >> {
+        + TLSVerifyCLI bool
+        + CredentialsCLI string
+        + SignPassphraseFileCLI string
+        + SignBySigstoreParamFileCLI string
+        + EncryptionKeys []string
+        + EncryptLayers []int
+        + DigestFile string
+
+    }
+    class searchOptionsWrapper << (S,Aquamarine) >> {
+        + Compatible bool
+        + CredentialsCLI string
+        + TLSVerifyCLI bool
+        + Format string
+        + NoTrunc bool
+
+    }
+}
+"entities.ImageHistoryLayer" *-- "images.historyReporter"
+"entities.ImageSummary" *-- "images.imageReporter"
+"entities.ImageMountReport" *-- "images.mountReporter"
+"entities.ImagePullOptions" *-- "images.pullOptionsWrapper"
+"entities.ImagePushOptions" *-- "images.pushOptionsWrapper"
+"entities.ImageSearchOptions" *-- "images.searchOptionsWrapper"
+
+
+namespace inspect {
+    class inspector << (S,Aquamarine) >> {
+        - containerEngine entities.ContainerEngine
+        - imageEngine entities.ImageEngine
+        - options entities.InspectOptions
+
+        - inspect(namesOrIDs []string) error
+        - inspectAll(ctx context.Context, namesOrIDs []string) ([]<font color=blue>interface</font>{}, []error, error)
+
+    }
+}
+
+
+namespace kube {
+    class downKubeOptions << (S,Aquamarine) >> {
+        + Force bool
+
+    }
+    class playKubeOptionsWrapper << (S,Aquamarine) >> {
+        - annotations []string
+        - macs []string
+
+        + TLSVerifyCLI bool
+        + CredentialsCLI string
+        + StartCLI bool
+        + BuildCLI bool
+
+    }
+}
+"entities.PlayKubeOptions" *-- "kube.playKubeOptionsWrapper"
+
+
+namespace machine {
+    class InitOptionalFlags << (S,Aquamarine) >> {
+        + UserModeNetworking bool
+
+    }
+    class SetFlags << (S,Aquamarine) >> {
+        + CPUs uint64
+        + DiskSize uint64
+        + Memory uint64
+        + Rootful bool
+        + UserModeNetworking bool
+        + USBs []string
+
+    }
+    class inspectFlagType << (S,Aquamarine) >> {
+        - format string
+
+    }
+    class listFlagType << (S,Aquamarine) >> {
+        - format string
+        - noHeading bool
+        - quiet bool
+        - allProviders bool
+
+    }
+}
+
+
+namespace main {
+    class autoUpdateOutput << (S,Aquamarine) >> {
+        + Unit string
+        + Container string
+        + ContainerName string
+        + ContainerID string
+        + Image string
+        + Policy string
+        + Updated string
+
+    }
+    class cliAutoUpdateOptions << (S,Aquamarine) >> {
+        - format string
+        - tlsVerify bool
+
+    }
+    class clientInfo << (S,Aquamarine) >> {
+        + OSArch string
+        + Provider string
+        + Version string
+        + BuildOrigin string
+
+    }
+    class loginOptionsWrapper << (S,Aquamarine) >> {
+        - tlsVerify bool
+
+    }
+}
+"entities.AutoUpdateOptions" *-- "main.cliAutoUpdateOptions"
+"auth.LoginOptions" *-- "main.loginOptionsWrapper"
+
+
+namespace manifest {
+    class manifestAddOptsWrapper << (S,Aquamarine) >> {
+        - artifactOptions entities.ManifestAddArtifactOptions
+        - tlsVerifyCLI bool
+        - insecure bool
+        - credentialsCLI string
+        - artifact bool
+        - artifactConfigFile string
+        - artifactType string
+
+    }
+    class manifestAnnotateOptsWrapper << (S,Aquamarine) >> {
+        - annotations []string
+        - index bool
+
+    }
+    class manifestCreateOptsWrapper << (S,Aquamarine) >> {
+        - annotations []string
+        - tlsVerifyCLI bool
+
+    }
+    class manifestPushOptsWrapper << (S,Aquamarine) >> {
+        + TLSVerifyCLI bool
+        + CredentialsCLI string
+        + SignBySigstoreParamFileCLI string
+        + SignPassphraseFileCLI string
+        + DigestFile string
+
+    }
+}
+"entities.ManifestAddOptions" *-- "manifest.manifestAddOptsWrapper"
+"entities.ManifestAnnotateOptions" *-- "manifest.manifestAnnotateOptsWrapper"
+"entities.ManifestCreateOptions" *-- "manifest.manifestCreateOptsWrapper"
+"entities.ImagePushOptions" *-- "manifest.manifestPushOptsWrapper"
+
+
+namespace network {
+    class ListPrintReports << (S,Aquamarine) >> {
+        + Labels() string
+        + ID() string
+
+    }
+}
+"types.Network" *-- "network.ListPrintReports"
+
+
+namespace os {
+    class Distribution << (S,Aquamarine) >> {
+        + Name string
+        + Variant string
+
+    }
+    class ManagerOpts << (S,Aquamarine) >> {
+        + VMName string
+        + CLIArgs []string
+        + Restart bool
+
+    }
+}
+
+
+namespace pods {
+    class ListPodReporter << (S,Aquamarine) >> {
+        + Created() string
+        + Labels() <font color=blue>map</font>[string]string
+        + Label(name string) string
+        + Networks() string
+        + NumberOfContainers() int
+        + ID() string
+        + Id() string
+        + InfraID() string
+        + InfraId() string
+        + ContainerIds() string
+        + ContainerNames() string
+        + ContainerStatuses() string
+        + Restarts() string
+
+    }
+    class logsOptionsWrapper << (S,Aquamarine) >> {
+        + SinceRaw string
+        + UntilRaw string
+
+    }
+    class lprSort << (S,Aquamarine) >> {
+        + Len() int
+        + Swap(i int, j int) 
+
+    }
+    class podPsSortedCreated << (S,Aquamarine) >> {
+        + Less(i int, j int) bool
+
+    }
+    class podPsSortedID << (S,Aquamarine) >> {
+        + Less(i int, j int) bool
+
+    }
+    class podPsSortedName << (S,Aquamarine) >> {
+        + Less(i int, j int) bool
+
+    }
+    class podPsSortedNumber << (S,Aquamarine) >> {
+        + Less(i int, j int) bool
+
+    }
+    class podPsSortedStatus << (S,Aquamarine) >> {
+        + Less(i int, j int) bool
+
+    }
+    class podRmOptionsWrapper << (S,Aquamarine) >> {
+        + PodIDFiles []string
+
+    }
+    class podStartOptionsWrapper << (S,Aquamarine) >> {
+        + PodIDFiles []string
+
+    }
+    class podStatsOptionsWrapper << (S,Aquamarine) >> {
+        + Format string
+        + NoReset bool
+        + NoStream bool
+
+    }
+    class podStopOptionsWrapper << (S,Aquamarine) >> {
+        - podIDFiles []string
+        - timeoutCLI int
+
+    }
+    class pods.lprSort << (T, #FF7700) >>  {
+    }
+    class "[]*entities.ListPodsReport" as entitiesListPodsReport {
+        'This class was created so that we can correctly have an alias pointing to this name. Since it contains dots that can break namespaces
+    }
+}
+"entities.ListPodsReport" *-- "pods.ListPodReporter"
+"entities.PodLogsOptions" *-- "pods.logsOptionsWrapper"
+"pods.lprSort" *-- "pods.podPsSortedCreated"
+"pods.lprSort" *-- "pods.podPsSortedID"
+"pods.lprSort" *-- "pods.podPsSortedName"
+"pods.lprSort" *-- "pods.podPsSortedNumber"
+"pods.lprSort" *-- "pods.podPsSortedStatus"
+"entities.PodRmOptions" *-- "pods.podRmOptionsWrapper"
+"entities.PodStartOptions" *-- "pods.podStartOptionsWrapper"
+"entities.PodStatsOptions" *-- "pods.podStatsOptionsWrapper"
+"entities.PodStopOptions" *-- "pods.podStopOptionsWrapper"
+
+
+namespace registry {
+    class CliCommand << (S,Aquamarine) >> {
+        + Command *cobra.Command
+        + Parent *cobra.Command
+
+    }
+}
+
+
+namespace secrets {
+    class listFlagType << (S,Aquamarine) >> {
+        - format string
+        - noHeading bool
+        - filter []string
+        - quiet bool
+
+    }
+}
+
+
+namespace system {
+    class Event << (S,Aquamarine) >> {
+        + ContainerExitCode *int
+        + ID string
+        + Image string
+        + Name string
+        + Network string
+        + Status events.Status
+        + Time int64
+        + TimeNano int64
+        + Type events.Type
+        + HealthStatus string
+        + Error string
+
+        + ToJSONString() (string, error)
+
+    }
+    class dfContainer << (S,Aquamarine) >> {
+        + ContainerID() string
+        + Image() string
+        + Command() string
+        + RWSize() string
+        + Created() string
+
+    }
+    class dfImage << (S,Aquamarine) >> {
+        + ImageID() string
+        + Created() string
+        + Size() string
+        + SharedSize() string
+        + UniqueSize() string
+
+    }
+    class dfSummary << (S,Aquamarine) >> {
+        + Type string
+        + Total int
+        + Active int
+        + RawSize int64
+        + RawReclaimable int64
+
+        + Size() string
+        + Reclaimable() string
+        + MarshalJSON() ([]byte, error)
+
+    }
+    class dfVolume << (S,Aquamarine) >> {
+        + Size() string
+
+    }
+    interface halfCloser  {
+    }
+    interface halfReadCloser  {
+        + CloseRead() error
+
+    }
+    class halfReadCloserWrapper << (S,Aquamarine) >> {
+        + CloseRead() error
+
+    }
+    interface halfReadWriteCloser  {
+    }
+    interface halfWriteCloser  {
+        + CloseWrite() error
+
+    }
+    class halfWriteCloserWrapper << (S,Aquamarine) >> {
+        + CloseWrite() error
+
+    }
+    class infoReport << (S,Aquamarine) >> {
+        + Client *define.Version
+
+    }
+    class nopCloseReader << (S,Aquamarine) >> {
+        + CloseRead() error
+
+    }
+}
+"events.Details" *-- "system.Event"
+"entities.SystemDfContainerReport" *-- "system.dfContainer"
+"entities.SystemDfImageReport" *-- "system.dfImage"
+"entities.SystemDfVolumeReport" *-- "system.dfVolume"
+"system.halfReadCloser" *-- "system.halfCloser"
+"system.halfWriteCloser" *-- "system.halfCloser"
+"io.ReadCloser" *-- "system.halfReadCloserWrapper"
+"system.halfWriteCloser" *-- "system.halfReadWriteCloser"
+"io.WriteCloser" *-- "system.halfWriteCloserWrapper"
+"define.Info" *-- "system.infoReport"
+"system.halfReadWriteCloser" *-- "system.nopCloseReader"
+
+"system.halfReadCloser" <|-- "system.halfReadCloserWrapper"
+"system.halfWriteCloser" <|-- "system.halfWriteCloserWrapper"
+"system.halfReadCloser" <|-- "system.nopCloseReader"
+
+namespace utils {
+    class OutputErrors << (S,Aquamarine) >> {
+        + PrintErrors() error
+
+    }
+    class utils.OutputErrors << (T, #FF7700) >>  {
+    }
+}
+
+
+namespace validate {
+    class ChoiceValue << (S,Aquamarine) >> {
+        - value *string
+        - choices []string
+
+        + String() string
+        + Set(value string) error
+        + Choices() string
+        + Type() string
+
+    }
+}
+
+
+"__builtin__.[]error" #.. "utils.OutputErrors"
+"__builtin__.int" #.. "common.completeType"
+"common.fontcolorbluemapfontstringfontcolorbluefuncfontstringstringcobraShellCompDirective" #.. "common.keyValueCompletion"
+"pods.entitiesListPodsReport" #.. "pods.lprSort"
+@enduml

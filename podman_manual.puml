@@ -1,0 +1,72 @@
+@startuml
+skinparam useOrthogonalEdges true
+left to right direction
+
+interface "OCI Configuration" as OCI_Config
+component "OCI-Compliant Runtimes" {
+    [Runc] as runc
+    [Crun] as crun
+}
+
+component "Buildah" {
+
+}
+
+component "Netavark" {
+
+}
+
+component "OCIRuntimeTools" {
+
+} 
+
+component "image" {
+
+}
+
+component "storage" {
+
+}
+
+component "Aardvark" {
+
+
+}
+
+component "pasta" {
+
+
+}
+
+component "Conmon" {
+
+}
+
+component "slirp4netns" {
+
+}
+
+component "Seccomp" {
+    
+}
+component "Podman" {
+
+}
+
+' Updated connections (you might need to adjust ordering or add further placement hints)
+Buildah -> OCIRuntimeTools
+' Note: Ensure the component names match the alias names defined above
+runc ..> OCI_Config : uses
+crun ..> OCI_Config : uses
+Buildah -> Seccomp
+Podman -> Seccomp
+Podman -> OCIRuntimeTools
+Podman -> Conmon
+Podman -> Buildah
+Podman -> pasta
+Podman -> slirp4netns
+Podman -> Aardvark
+Podman -> Netavark
+Podman -> Storage
+Podman -> Image
+@enduml

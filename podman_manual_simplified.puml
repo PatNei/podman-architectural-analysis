@@ -1,0 +1,98 @@
+@startuml
+skinparam useOrthogonalEdges true
+title Architecture of Podman
+left to right direction
+legend "Naming scheme: "Organisation | ProjectName""
+interface "opencontainers | OCI Configuration" as OCI_Config
+component "opencontainers | runtime-tools" as Runtimetools
+
+component "opencontainers | Podman Desktop" as PodmanDesktop
+
+package "OCI-Compliant Runtimes" as  OCIRuntimeTools {
+    [opencontainers | Runc] as runc
+    [containers | Crun] as crun
+}
+component "containers | Buildah" as Buildah
+
+
+component "containers | image" as Image 
+
+component "containers | gvisor-tap-vsock" as gvisor
+component "OCI Compliant image" as OCIImage 
+component "OCI Compliant container" as OCIImage 
+component "containers | storage" as Storage
+package "Networking" {
+
+component "containers | Netavark" as Netavark
+component "containers | Aardvark (DNS)" as Aardvark
+component "passt | pasta" as pasta 
+component "rootless-containers | slirp4netns" as slirp4netns
+
+}
+
+component "containers | Conmon" as Conmon
+
+
+interface "containers | Seccomp" as Seccomp
+component "containers | Podman" as Podman
+component "CRI-O | CRI-O" as CRIO
+component "CRIU | CRIU" as CRIU
+
+' Updated connections (you might need to adjust ordering or add further placement hints)
+' Buildah -> OCIRuntimeTools
+' Podman -> OCIRuntimeTools
+
+
+Image -> OCIImage : manages
+Buildah -> OCIImage : builds
+Podman -> OCIImage : maintain and modifies
+PodmanDesktop -> Podman : uses
+
+CRIO   -> Conmon : uses
+Conmon -> OCIRuntimeTools : monitors
+Podman -> Runtimetools
+
+' Note: Ensure the component names match the alias names defined above
+Runtimetools ..> OCI_Config: generates
+runc ..> OCI_Config : uses
+crun ..> OCI_Config : uses
+
+Buildah ..> Seccomp : implements
+Podman ..> Seccomp : implements
+CRIO ..> Seccomp : implements
+
+Podman -> gvisor
+Podman -> Conmon
+Podman -> Buildah
+Podman -> pasta
+Podman -> slirp4netns
+Podman -> Aardvark
+Podman -> Netavark
+Podman -> Storage
+Podman -> Image
+Podman -> CRIU
+
+' Note section
+note right of [Image]
+Handles Image management
+end note
+note right of [Storage]
+Handles Container and image storage
+end note
+note left of Networking
+Networking support through Netavark and Aadvark.
+Rootless networking is handled via pasta or slirp4netns
+end note
+
+note left of [Buildah]
+Builds are supported via Buildah
+end note
+
+note left of [Conmon]
+Monitors OCI runtimes, used by both Podman and CRI-O.
+end note
+
+note right of Seccomp
+A unified policy for Podman, Buildah, and CRI-O.
+end note
+@enduml

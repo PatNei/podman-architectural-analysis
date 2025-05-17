@@ -60,6 +60,8 @@ contrib/win-installer/*.wixpdb
 contrib/win-installer/*.log
 podman-cleanup-tracer.log*
 
+*.typ
+*.pdf
 # Devenv
 .devenv*
 devenv.local.nix
@@ -70,3 +72,5 @@ devenv.local.nix
 # pre-commit
 .pre-commit-config.yaml
 old_graphs
+lib
+!paab.typ

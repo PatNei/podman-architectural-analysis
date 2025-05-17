@@ -1,0 +1,118 @@
+@startuml
+skinparam componentStyle rectangle
+left to right direction
+title Generated Architecture of Podman
+legend "Naming scheme: Organisations | ProjectName"
+skinparam backgroundColor white
+skinparam ArrowFontSize 15
+skinparam ArrowFontBackgroundColor White
+
+component "containers | buildah" as buildah_
+component "containers | libhvee" as libhvee_
+component "containers | storage" as storage_
+component "opencontainers | selinux" as selinux_
+component "containers | image/v5" as image_v5_
+component "containers | conmon" as conmon_
+component "containers | libtrust" as libtrust_
+component "opencontainers | go-digest" as go_digest_
+component "containers | psgo" as psgo_
+component "opencontainers | runtime-spec" as runtime_spec_
+component "containernetworking | plugins" as plugins_
+component "containers | luksy" as luksy_
+component "opencontainers | runc" as runc_
+component "containernetworking | cni" as cni_
+component "rootless-containers | rootlesskit/v2" as rootlesskit_v2_
+component "checkpoint-restore | go-criu/v7" as go_criu_v7_
+component "opencontainers | image-spec" as image_spec_
+component "containers | winquit" as winquit_
+component "containers | common" as common_
+component "containers | gvisor-tap-vsock" as gvisor_tap_vsock_
+component "containers | podman/v5" as podman_v5_
+component "opencontainers | runtime-tools" as runtime_tools_
+component "containers | ocicrypt" as ocicrypt_
+component "checkpoint-restore | checkpointctl" as checkpointctl_
+component "checkpoint-restore | go-criu/v6" as go_criu_v6_
+
+storage_ --> selinux_ : v1.11.1
+podman_v5_ --> ocicrypt_ : v1.2.1
+runc_ --> selinux_ : v1.11.0
+buildah_ --> libtrust_ : v0.0.0-202
+podman_v5_ --> gvisor_tap_vsock_ : v0.8.4
+podman_v5_ --> selinux_ : v1.11.1
+image_spec_ --> go_digest_ : v1.0.0
+plugins_ --> selinux_ : v1.11.0
+podman_v5_ --> winquit_ : v1.1.0
+storage_ --> go_digest_ : v1.0.0
+runc_ --> go_criu_v6_ : v6.3.0
+common_ --> cni_ : v1.2.3
+buildah_ --> luksy_ : v0.0.0-202
+podman_v5_ --> cni_ : v1.2.3
+common_ --> image_spec_ : v1.1.0
+common_ --> go_criu_v7_ : v7.2.0
+common_ --> plugins_ : v1.5.1
+image_v5_ --> runtime_spec_ : v1.2.0
+libhvee_ --> common_ : v0.60.4
+storage_ --> runtime_spec_ : v1.2.0
+podman_v5_ --> image_spec_ : v1.1.0
+runtime_tools_ --> runtime_spec_ : v1.1.0
+buildah_ --> ocicrypt_ : v1.2.1
+podman_v5_ --> plugins_ : v1.5.1
+image_v5_ --> libtrust_ : v0.0.0-202
+image_v5_ --> image_spec_ : v1.1.0
+rootlesskit_v2_ --> plugins_ : v1.5.1
+gvisor_tap_vsock_ --> winquit_ : v1.1.0
+podman_v5_ --> rootlesskit_v2_ : v2.3.2
+gvisor_tap_vsock_ --> go_digest_ : v1.0.0
+podman_v5_ --> libhvee_ : v0.9.0
+checkpointctl_ --> go_criu_v7_ : v7.2.0
+checkpointctl_ --> storage_ : v1.54.0
+buildah_ --> cni_ : v1.2.3
+psgo_ --> storage_ : v1.52.0
+ocicrypt_ --> image_spec_ : v1.1.0
+common_ --> storage_ : v1.57.2
+common_ --> selinux_ : v1.11.1
+image_v5_ --> storage_ : v1.57.2
+podman_v5_ --> luksy_ : v0.0.0-202
+runc_ --> runtime_spec_ : v1.2.0
+common_ --> runtime_tools_ : v0.9.1-0.2
+buildah_ --> image_spec_ : v1.1.0
+podman_v5_ --> psgo_ : v1.9.0
+buildah_ --> plugins_ : v1.5.1
+common_ --> go_digest_ : v1.0.0
+podman_v5_ --> go_criu_v7_ : v7.2.0
+common_ --> image_v5_ : v5.34.3
+image_v5_ --> selinux_ : v1.11.1
+podman_v5_ --> go_digest_ : v1.0.0
+podman_v5_ --> image_v5_ : v5.34.3
+image_v5_ --> go_digest_ : v1.0.0
+buildah_ --> runc_ : v1.2.4
+checkpointctl_ --> runtime_spec_ : v1.2.0
+common_ --> runtime_spec_ : v1.2.0
+runtime_tools_ --> selinux_ : v1.9.1
+common_ --> checkpointctl_ : v1.3.0
+podman_v5_ --> storage_ : v1.57.2
+common_ --> libtrust_ : v0.0.0-202
+podman_v5_ --> runtime_spec_ : v1.2.0
+buildah_ --> storage_ : v1.57.2
+buildah_ --> selinux_ : v1.11.1
+image_v5_ --> ocicrypt_ : v1.2.1
+podman_v5_ --> checkpointctl_ : v1.3.0
+ocicrypt_ --> go_digest_ : v1.0.0
+podman_v5_ --> buildah_ : v1.39.4
+podman_v5_ --> libtrust_ : v0.0.0-202
+podman_v5_ --> common_ : v0.62.3
+buildah_ --> runtime_tools_ : v0.9.1-0.2
+buildah_ --> common_ : v0.62.3
+podman_v5_ --> runtime_tools_ : v0.9.1-0.2
+buildah_ --> go_digest_ : v1.0.0
+buildah_ --> image_v5_ : v5.34.3
+common_ --> runc_ : v1.2.4
+podman_v5_ --> conmon_ : v2.0.20+in
+podman_v5_ --> runc_ : v1.2.4
+plugins_ --> cni_ : v1.1.2
+libhvee_ --> storage_ : v1.55.1
+common_ --> ocicrypt_ : v1.2.1
+psgo_ --> runc_ : v1.1.12
+buildah_ --> runtime_spec_ : v1.2.0
+
+@enduml

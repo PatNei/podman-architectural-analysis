@@ -11,6 +11,7 @@
   pkgs.plantuml
   pkgs.golangci-lint
   pkgs.cloc
+  pkgs.imagemagick
 
   ];
 

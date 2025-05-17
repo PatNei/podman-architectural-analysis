@@ -21,50 +21,40 @@ interface "OCI Compliant image" as oci_image_
 
 component "CRI-O | CRI-O" as crio_
 component "containers | Podman Desktop" as podman_desktop_
-component "containers | Podman" as podman_v5_
+component "containers | Podman" as podman_
 interface "containers | Seccomp" as seccomp_
 component "opencontainers | runtime-tools" as runtime_tools_
 
 interface "containers | Container" as pod_container_
 
-component "CRIU | CRIU" as go_criu_v7_
+component "CRIU | CRIU" as criu_
 
-component "containers | Buildah" as buildah_
-component "containers | Image" as image_v5_
-component "containers | gvisor-tap-vsock" as gvisor_
-component "containers | Storage" as storage_
-interface "containers | common/libimage" as pod_image_
-component "containers | Conmon" as conmon_
-component "containers | Netavark" as netavark_
-component "containers | Aardvark (DNS)" as aardvark_
-component "passt | pasta" as pasta_
-component "rootless-containers | slirp4netns" as slirp4netns_
+package Libpod as libpod_ {
+    component "containers | Buildah" as buildah_
+    component "containers | Image" as image_
+    component "containers | gvisor-tap-vsock" as gvisor_
+    component "containers | Storage" as storage_
+    interface "containers | common/libimage" as pod_image_
+    component "containers | Conmon" as conmon_
+    package "Networking" as networking_ {
+        component "containers | Netavark" as netavark_
+        component "containers | Aardvark (DNS)" as aardvark_
+        component "passt | pasta" as pasta_
+        component "rootless-containers | slirp4netns" as slirp4netns_
+    }
 ' component "containers | Podman" as Podman
+}
 ' Updated connections (you might need to adjust ordering or add further placement hints)
 ' Buildah -> OCIRuntimeTools
 ' Podman -> OCIRuntimeTools
 
-podman_v5_ -> buildah_
-podman_v5_ -> image_v5_
-podman_v5_ -> gvisor_
-podman_v5_ -> storage_
-podman_v5_ -> pod_image_
-podman_v5_ -> conmon_
-podman_v5_ -> netavark_
-podman_v5_ -> aardvark_
-podman_v5_ -> pasta_
-podman_v5_ -> slirp4netns_ 
-podman_v5_ ..>  seccomp_
-podman_v5_ --> go_criu_v7_
-podman_v5_ --> runtime_tools_
-podman_v5_ --> "creates" pod_container_
-
 
 buildah_ "builds" --> pod_image_
 buildah_ "implements" ..> seccomp_
-podman_desktop_ -left-> podman_v5_
+podman_desktop_ -left-> podman_
+podman_ --> libpod_
 
-image_v5_ "manages" --> pod_image_
+image_ "manages" --> pod_image_
 
 conmon_ "monitors" --> oci_runtime_tools_
 
@@ -77,6 +67,10 @@ crio_ ..> seccomp_ : implements
 
 ' Podman --> OCIImage : maintain and modifies
 ' Podman --> OCIContainer : maintain and modifies
+libpod_ ..>  seccomp_
+libpod_ --> criu_
+libpod_ --> runtime_tools_
+libpod_ --> "creates" pod_container_
 pod_image_  ..> "implements" oci_image_
 pod_container_  ..>  "implements" oci_container_
 ' Podman --> Runtimetools : uses
@@ -94,16 +88,16 @@ pod_container_  ..>  "implements" oci_container_
 ' Podman -> CRIU
 
 ' Note section
-note left of [image_v5_]
+note left of [image_]
 Handles Image management
 end note
 note left of [storage_]
 Handles Container and image storage
 end note
-' note left of networking_
-' Networking support through Netavark and Aadvark.
-' Rootless networking is handled via pasta or slirp4netns
-' end note
+note left of networking_
+Networking support through Netavark and Aadvark.
+Rootless networking is handled via pasta or slirp4netns
+end note
 
 note left of [buildah_]
 Builds are supported via Buildah
@@ -117,17 +111,17 @@ note right of seccomp_
 A unified policy for Podman, Buildah, and CRI-O.
 end note
 
-note right of go_criu_v7_
+note right of criu_
 Handles checkpointing and restoring for containers
 end note
 
-' note left of podman_v5_ #Crimson
-' Important:
-' To improve the visual appeal of this diagram, all dependencies associated 
-' with Libpod have been grouped into a single Libpod module. 
+note left of libpod_ #Crimson
+Important:
+To improve the visual appeal of this diagram, all dependencies associated 
+with Libpod have been grouped into a single Libpod module. 
 
-' In a more detailed representation, each dependency would be explicitly 
-' shown as an individual arrow originating from Libpod and pointing to the 
-' respective component.
-' end note
+In a more detailed representation, each dependency would be explicitly 
+shown as an individual arrow originating from Libpod and pointing to the 
+respective component.
+end note
 @enduml
